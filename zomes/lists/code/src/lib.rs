@@ -1,7 +1,3 @@
-
-#[macro_use]
-extern crate hdk;
-    
 #![feature(try_from)]
 use std::convert::TryFrom;
 #[macro_use]
@@ -62,9 +58,24 @@ define_zome! {
     }
  
     functions: [
+        create_list: {
+            inputs: |list: List|,
+            outputs: |result: ZomeApiResult<Address>|,
+            handler: handle_create_list
+        }
+        add_item: {
+            inputs: |list_item: ListItem, list_addr: HashString|,
+            outputs: |result: ZomeApiResult<Address>|,
+            handler: handle_add_item
+        }
+        get_list: {
+            inputs: |list_addr: HashString|,
+            outputs: |result: ZomeApiResult<GetListResponse>|,
+            handler: handle_get_list
+        }
     ]
- 
     traits: {
+        hc_public [create_list, add_item, get_list]
     }
 }
 
@@ -141,4 +152,4 @@ struct ListItem {
 struct GetListResponse {
     name: String,
     items: Vec<ListItem>
-}s
+}
